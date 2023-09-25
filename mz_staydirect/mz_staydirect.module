@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * @file
+ * Contains mz_chat.module.
+ */
+
+function mz_staydirect_form_alter(&$form, &$form_state, $form_id)  {
+  
+  if ($form_id == 'node_site_form') {
+
+  }
+}
+
+  
+  
