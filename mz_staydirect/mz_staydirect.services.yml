@@ -1,0 +1,5 @@
+services:
+  mz_staydirect.theme_negotiator:
+    class: Drupal\mz_staydirect\Theme\UpdatePageThemeNegotiator
+    tags:
+      - { name: theme_negotiator, priority: 1000 }
