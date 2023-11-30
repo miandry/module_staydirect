@@ -21,13 +21,9 @@ class UpdatePageThemeNegotiator implements ThemeNegotiatorInterface {
    * @return bool
    */
   public function applies(RouteMatchInterface $route_match) {
-    if (
-      $route_match->getRouteName() == 'system.db_update'
-    ) {
-         return "staydirect_install";
-      }
+      return $this->negotiateRoute($route_match) ? true : false;
 
-      return FALSE;
+    
   }
 
   /**
@@ -35,16 +31,22 @@ class UpdatePageThemeNegotiator implements ThemeNegotiatorInterface {
    * @return null|string
    */
   public function determineActiveTheme(RouteMatchInterface $route_match) {
-    return $this->negotiateRoute($route_match) ?: NULL;
+    return $this->negotiateRoute($route_match) ?: null;
   }
-  private function negotiateRoute(RouteMatchInterface $route_match) {
-    if (
+     /**
+    * Function that does all of the work in selecting a theme
+    * @param RouteMatchInterface $route_match
+    * @return bool|string
+    */
+    private function negotiateRoute(RouteMatchInterface $route_match)
+    {
+      if (
         $route_match->getRouteName() == 'system.db_update'
       ) {
-      return "staydirect_install";
+           return "staydirect_install";
+        }
+        return FALSE;
     }
 
-    return FALSE;
-  }
 
 }
