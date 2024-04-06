@@ -1,5 +1,6 @@
 <?php
-
+use Drupal\Core\Url;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 /**
  * @file
  * Contains mz_chat.module.
@@ -13,4 +14,33 @@ function mz_staydirect_form_alter(&$form, &$form_state, $form_id)  {
 }
 
   
-  
+/**
+ * Implements hook_preprocess_HOOK() for page templates.
+ */
+function mz_staydirect_preprocess_page(&$variables) {
+
+  $route = \Drupal::routeMatch()->getRouteObject();
+  $is_admin = \Drupal::service('router.admin_context')->isAdminRoute($route);
+  if(!$is_admin){
+      // Check the value of a configuration variable.
+      $config = \Drupal::config('mz_staydirect.settings');
+      $init = $config->get('init');
+      if( $init == 0 ){
+        global $site_variables ;
+        // switch themes       
+        $theme = "staydirect_".$site_variables["site_theme"];
+        \Drupal::configFactory()
+          ->getEditable('system.theme')
+          ->set('default', $theme)
+          ->save();
+
+          \Drupal::configFactory()->getEditable('mz_staydirect.settings')
+          ->set('init',1)
+          ->save();
+          drupal_flush_all_caches();  
+          // Redirect to the front page.
+          $response = new RedirectResponse(Url::fromRoute('<front>')->toString());
+          $response->send();
+      }
+  }
+}
