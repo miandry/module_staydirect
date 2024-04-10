@@ -29,19 +29,19 @@ function mz_staydirect_preprocess_page(&$variables) {
       if( $init == 0 ){
    
         // switch themes       
-        $theme = "staydirect_".$site_variables["site_theme"];
-        \Drupal::configFactory()
-          ->getEditable('system.theme')
-          ->set('default', $theme)
-          ->save();
+        // $theme = "staydirect_".$site_variables["site_theme"];
+        // \Drupal::configFactory()
+        //   ->getEditable('system.theme')
+        //   ->set('default', $theme)
+        //   ->save();
 
-          \Drupal::configFactory()->getEditable('mz_staydirect.settings')
-          ->set('init',1)
-          ->save();
-          drupal_flush_all_caches();  
-          // Redirect to the front page.
-          $response = new RedirectResponse(Url::fromRoute('<front>')->toString());
-          $response->send();
+        //   \Drupal::configFactory()->getEditable('mz_staydirect.settings')
+        //   ->set('init',1)
+        //   ->save();
+        //   drupal_flush_all_caches();  
+        //   // Redirect to the front page.
+        //   $response = new RedirectResponse(Url::fromRoute('<front>')->toString());
+        //   $response->send();
       }
   }
 }
