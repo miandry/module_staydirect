@@ -21,12 +21,13 @@ function mz_staydirect_preprocess_page(&$variables) {
 
   $route = \Drupal::routeMatch()->getRouteObject();
   $is_admin = \Drupal::service('router.admin_context')->isAdminRoute($route);
-  if(!$is_admin){
+  global $site_variables ;
+  if(!$is_admin && isset($site_variables["site_theme"])){
       // Check the value of a configuration variable.
       $config = \Drupal::config('mz_staydirect.settings');
       $init = $config->get('init');
       if( $init == 0 ){
-        global $site_variables ;
+   
         // switch themes       
         $theme = "staydirect_".$site_variables["site_theme"];
         \Drupal::configFactory()
