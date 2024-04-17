@@ -21,13 +21,13 @@ class UpdatePageThemeNegotiator implements ThemeNegotiatorInterface {
    * @return bool
    */
   public function applies(RouteMatchInterface $route_match) {
-    if (
-      $route_match->getRouteName() == 'system.db_update'
-    ) {
-         return "staydirect_install";
-      }
-
-      return FALSE;
+    $route = $route_match->getRouteObject();
+    $is_admin_route = \Drupal::service('router.admin_context')->isAdminRoute($route);
+    global $site_variables ;
+    if(!$is_admin_route && $site_variables  && isset($site_variables["site_theme"])){
+       return TRUE ;
+    }
+    return FALSE;
   }
 
   /**
@@ -35,16 +35,11 @@ class UpdatePageThemeNegotiator implements ThemeNegotiatorInterface {
    * @return null|string
    */
   public function determineActiveTheme(RouteMatchInterface $route_match) {
-    return $this->negotiateRoute($route_match) ?: NULL;
+    global $site_variables;
+    $theme = "staydirect_".$site_variables["site_theme"];
+    return $theme ;
   }
   private function negotiateRoute(RouteMatchInterface $route_match) {
-    if (
-        $route_match->getRouteName() == 'system.db_update'
-      ) {
-      return "staydirect_install";
-    }
-
     return FALSE;
   }
-
 }
