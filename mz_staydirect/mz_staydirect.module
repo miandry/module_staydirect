@@ -21,9 +21,33 @@ function mz_staydirect_preprocess_block(&$variables) {
     $block_object = $variables['content']['#block_content'];
     $type = $block_object->bundle();
     $service_booking = \Drupal::service('mz_booking.manager');
+
     $variables['#cache']['max-age'] = 0;
     if($type =='header'){
       $variables['site_variables'] = $site_variables;
+    }
+    if($type == "contact"){
+    
+      $service = \Drupal::service('drupal.helper');
+      $params = $service->helper->get_parameter();
+      if(isset($params['email']) && isset($params['request_body'])){
+          $config = \Drupal::config('mz_staydirect.settings');
+          $site_infos = $config->get('site_variables');
+          $email = \Drupal::config('system.site')->get('mail');
+          if( isset($site_infos["email"])){
+            $email = $site_infos["email"];
+          }
+          
+         $status =  $service->helper->send_mail_simple($params['request_body'], $email ,$params['email'],'Send Request ');
+         if(  $status ) {
+          $message = "Your request is sent successfully...";
+          \Drupal::messenger()->addMessage($message);
+         }else {
+          $message =  "Your request could not be sent...";
+          \Drupal::messenger()->addMessage($message,'error');
+         }
+      }
+
     }
   }
 }
@@ -32,30 +56,15 @@ function mz_staydirect_preprocess_block(&$variables) {
  * Implements hook_preprocess_HOOK() for page templates.
  */
 function mz_staydirect_preprocess_page(&$variables) {
-
-  $route = \Drupal::routeMatch()->getRouteObject();
-  $is_admin = \Drupal::service('router.admin_context')->isAdminRoute($route);
   global $site_variables ;
-  if(!$is_admin && $site_variables  && isset($site_variables["site_theme"])){
+  if($site_variables && $site_variables["email"] && isset($site_variables["site_theme"])){
       // Check the value of a configuration variable.
       $config = \Drupal::config('mz_staydirect.settings');
-      $init = $config->get('init');
-      if( $init == 0 ){
-   
-        // switch themes       
-        // $theme = "staydirect_".$site_variables["site_theme"];
-        // \Drupal::configFactory()
-        //   ->getEditable('system.theme')
-        //   ->set('default', $theme)
-        //   ->save();
-
-        //   \Drupal::configFactory()->getEditable('mz_staydirect.settings')
-        //   ->set('init',1)
-        //   ->save();
-        //   drupal_flush_all_caches();  
-        //   // Redirect to the front page.
-        //   $response = new RedirectResponse(Url::fromRoute('<front>')->toString());
-        //   $response->send();
+      $site_infos = $config->get('site_variables');
+      if(  $site_infos == null ){
+          \Drupal::configFactory()->getEditable('mz_staydirect.settings')
+          ->set('site_variables',$site_variables)
+          ->save();
       }
   }
 }
