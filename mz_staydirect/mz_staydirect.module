@@ -72,6 +72,6 @@ function mz_staydirect_preprocess_html(&$variables) {
   $service_helper = \Drupal::service('drupal.helper');
   $params = $service_helper->helper->get_parameter();
   if(isset($params['cache']) && $params['cache']==1 ){
-    \Drupal::service('router.builder')->rebuild();
+    drupal_flush_all_caches();
   }
 }
