@@ -28,8 +28,8 @@ class UpdatePageThemeNegotiator implements ThemeNegotiatorInterface {
     if(!$is_admin_route && $site_variables  && isset($site_variables["site_theme"])){
        return TRUE ;
     }
-    if( $status == 1){
-      return TRUE ;
+    if( !$is_admin_route && $status == 1){
+       return TRUE ;
     }
     return FALSE;
   }
