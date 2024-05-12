@@ -7,10 +7,18 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  */
 
 function mz_staydirect_form_alter(&$form, &$form_state, $form_id)  {
-  
-  if ($form_id == 'node_site_form') {
-   
+ 
+  if ($form_id == 'user_form') {
+    $form['actions']['submit']['#submit'][] = '_mz_staydirect_custom_submit';
   }
+}
+/**
+ * Custom submit handler for user profile edit form.
+ */
+function _mz_staydirect_custom_submit(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  $redirect_path = "/";
+  $url = url::fromUserInput($redirect_path);
+  $form_state->setRedirectUrl($url);
 }
 /**
  * Implements hook_preprocess_HOOK().
