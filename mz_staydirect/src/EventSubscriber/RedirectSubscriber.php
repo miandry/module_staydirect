@@ -7,7 +7,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-
+use Drupal\user\Entity\User;
 /**
  * Redirects users before HTML loading.
  */
