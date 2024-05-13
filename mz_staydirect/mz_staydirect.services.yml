@@ -3,3 +3,7 @@ services:
     class: Drupal\mz_staydirect\Theme\UpdatePageThemeNegotiator
     tags:
       - { name: theme_negotiator, priority: 1000 }
+  mz_staydirect.redirect_subscriber:
+    class: Drupal\mz_staydirect\EventSubscriber\RedirectSubscriber
+    tags:
+      - { name: event_subscriber }    
