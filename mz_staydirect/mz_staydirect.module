@@ -1,13 +1,13 @@
 <?php
 use Drupal\Core\Url;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Drupal\user\Entity\User;
 /**
  * @file
  * Contains mz_chat.module.
  */
 
 function mz_staydirect_form_alter(&$form, &$form_state, $form_id)  {
- 
   if ($form_id == 'user_form') {
     $form['actions']['submit']['#submit'][] = '_mz_staydirect_custom_submit';
   }
@@ -16,9 +16,17 @@ function mz_staydirect_form_alter(&$form, &$form_state, $form_id)  {
  * Custom submit handler for user profile edit form.
  */
 function _mz_staydirect_custom_submit(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
-  $redirect_path = "/";
-  $url = url::fromUserInput($redirect_path);
-  $form_state->setRedirectUrl($url);
+  // $uid = $form_state->getFormObject()->getEntity()->id();
+  // // Get the new password from the form state.
+  // $new_password = $form_state->getValue('pass');
+  // // Check if the password is changed.
+  // if ($new_password !="") {
+  //   \Drupal::messenger()->addMessage(t('The password has been changed.'));
+  // } else {
+  //   $uid = \Drupal::currentUser()->id();
+  //   $url = Url::fromRoute('entity.user.edit_form', ['user' => $uid]);
+  //   $form_state->setRedirectUrl($url);
+  // }
 }
 /**
  * Implements hook_preprocess_HOOK().
@@ -59,7 +67,16 @@ function mz_staydirect_preprocess_block(&$variables) {
     }
   }
 }
-  
+/**
+ * Implements hook_cron().
+ *
+ * Cette fonction est exécutée chaque fois que le cron de Drupal est lancé.
+ */
+
+function mz_staydirect_cron() {
+  \Drupal::logger('mz_staydirect')->info('Tâche cron personnalisée exécutée à @time.', ['@time' => date('Y-m-d H:i:s')]);
+} 
+ 
 /**
  * Implements hook_preprocess_HOOK() for page templates.
  */
