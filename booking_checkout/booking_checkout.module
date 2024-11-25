@@ -1,0 +1,24 @@
+ <?php
+
+/**
+ * Implements hook_theme().
+ */
+function booking_checkout_theme() {
+  return [
+    'checkout_step_one' => [
+      'variables' => ['form' => NULL, 'title' => NULL],
+      'template' => 'checkout-step-one',
+      'path' => drupal_get_path('module', 'booking_checkout') . '/templates',
+    ],
+    'checkout_step_two' => [
+      'variables' => ['form' => NULL, 'title' => NULL],
+      'template' => 'checkout-step-two',
+      'path' => drupal_get_path('module', 'booking_checkout') . '/templates',
+    ],
+    'checkout_step_three' => [
+      'variables' => ['form' => NULL, 'title' => NULL],
+      'template' => 'checkout-step-three',
+      'path' => drupal_get_path('module', 'booking_checkout') . '/templates',
+    ],
+  ];
+}

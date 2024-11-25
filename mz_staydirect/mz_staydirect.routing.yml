@@ -1,0 +1,7 @@
+mz_staydirect.unsubscribe:
+   path: '/unsubscribe'
+   defaults:
+     _form: '\Drupal\mz_staydirect\Form\unsubscribeForm'
+     _title: 'unsubscribeForm'
+   requirements:
+     _permission: 'access content'

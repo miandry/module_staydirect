@@ -1,0 +1,24 @@
+
+booking_checkout.step_1:
+  path: '/order1'
+  defaults:
+    _controller: '\Drupal\booking_checkout\Controller\CheckoutController::stepOne'
+    _title: 'Step 1: Select Booking'
+  requirements:
+    _permission: 'access content'
+
+booking_checkout.step_2:
+  path: '/checkout/step-2'
+  defaults:
+    _controller: '\Drupal\booking_checkout\Controller\CheckoutController::stepTwo'
+    _title: 'Step 2: Enter Details'
+  requirements:
+    _permission: 'access content'
+
+booking_checkout.step_3:
+  path: '/checkout/step-3'
+  defaults:
+    _controller: '\Drupal\booking_checkout\Controller\CheckoutController::stepThree'
+    _title: 'Step 3: Review and Pay'
+  requirements:
+    _permission: 'access content'

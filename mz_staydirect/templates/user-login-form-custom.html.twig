@@ -1,0 +1,46 @@
+<style>
+	.custom-login-form-wrapper {
+		background-color: #F6F6F6 !important;
+		padding: 20px;
+		border-radius: 25px;
+	}
+	.custom-login-form-wrapper input {
+		border: 1px solid !important;
+		margin-top: 10px !important;
+		margin-bottom: 10px !important;
+
+	}
+	.form-actions {
+		margin-top: 0 !important;
+		margin-bottom: 0 !important;
+	}
+	.main--step-rectf form input,
+	.main--step-rectf form textarea {
+		margin-top: 10px !important;
+		margin-bottom: 10px !important;
+	}
+	.form-item__description {
+		display: none;
+	}
+    .log-space{
+        margin-left: 25px;
+    }
+</style>
+<div class="custom-login-form-wrapper">
+	<div class="form-fields">
+		{{ form|without('actions') }}
+	</div>
+	<div class="form-actions1">
+		{{ form.actions }}
+	</div>
+	<div class="description--register-forget">
+		<span>
+			<a href="/user/register">
+				Register
+			</a>
+		</span> 
+		<span>
+			<a class="log-space" href="/user/password">Forget Password</a>
+		</span>
+	</div>
+</div>

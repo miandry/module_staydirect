@@ -1,0 +1,6 @@
+
+name: 'Booking Checkout'
+type: module
+description: 'Provides a checkout process for the booking system.'
+core_version_requirement: ^8.7.7 || ^9 || ^10
+package: Custom

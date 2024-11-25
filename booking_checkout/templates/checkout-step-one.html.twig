@@ -1,0 +1,216 @@
+{% set inc_ = include_template("include-process-order") %}
+{% if (inc_["status"]) %}
+      {{inc_}}
+{% else %}
+
+{% set id  = id_by_url() %}
+{% set n = node_parser(id) %}
+
+
+{{ attach_library('staydirect_install/global-styling') }}
+
+{{ attach_library('staydirect/maintenance') }}
+
+{% set step_number = "Website" %}
+{% set step_name = "Information" %}
+
+<style>
+.layout-region--node-main, .layout-region--node-footer {
+        width: 100%!important;
+
+}
+.main-step form input,.main-step form textarea {
+  color:#232429 !important
+}
+.descriptionsitename{
+   margin-top: -30px;color: rgba(51, 51, 51, 0.50);
+}
+
+.layout-region--node-secondary{
+    display:none!important;
+}
+.site-manager-process{
+    background-color: #F6F6F6;
+    padding: 25px;
+    border-radius: 13px;
+}
+#edit-submit{
+  color:white!important;
+  background-color: #62929E!important;
+}
+#edit-field-profile-ecommerce{
+    pointer-events: none;
+    background-color: #dad9d9;
+}
+.fieldset__label--group {
+    font-size: 21px!important;
+    padding-bottom: 10px!important;
+}
+.logo {
+  width: auto!important;
+  height: auto!important;
+}
+.main-step .vertical-tabs{
+display:none!important;
+}
+.node-site-form{
+  padding: 25px;
+  background-color: #F6F6F6;
+  margin-top: 49px;
+  border-radius: 27px;
+}
+.node-site-form label {
+  display: block!important;
+}
+
+.logo {
+  width: auto!important;
+  height: auto!important;
+}
+.main-step .vertical-tabs{
+  display:none!important;
+}
+.node-site-form{
+  padding: 25px;
+  background-color: #F6F6F6;
+  margin-top: 49px;
+  border-radius: 27px;
+}
+.node-site-form label {
+  display: block!important;
+}
+
+
+/* rectf */
+.header--step-rectf .top-left .logo {
+  margin-top: 63px !important;
+}
+.main--step-rectf .sidebar {
+  padding-top: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+.main--step-rectf  .sidebar p {
+  padding-top: 4.5px !important;
+  padding-bottom: 4.5px !important;
+  margin-top: 1rem !important;
+  margin-bottom: 1rem !important;
+}
+.main--step-rectf  .sidebar .d-flex.active p {
+  color: #fff !important;
+  font-size: 18px !important;
+  font-family: "kanit"!important;
+}
+.main--step-rectf .col-md-8 {
+  padding-left: 3rem !important;
+}
+.main--step-rectf .col-md-8, .main--step-rectf .choosecontent {
+  padding-right: 0 !important;
+}
+.main--step-rectf .node-site-form {
+  margin-top: 0 !important;
+}
+.main--step-rectf form input {
+  height: 60px !important;
+}
+.main--step-rectf form input,  .main--step-rectf textarea {
+  flex-shrink: 0 !important;;
+  border-radius: 10px !important;;
+  border-radius: 10px!important;;
+  background: #F6F6F6 !important;;
+  color: rgba(51, 51, 51, 0.62) !important;;
+  font-size: 20px !important;;
+  font-family: Kanit !important;;
+  font-style: normal !important;;
+  font-weight: 700 !important;;
+  line-height: 150% !important;;
+  letter-spacing: 1.6px !important;;
+  padding: 15px 20px !important;;
+  margin-top: 15px !important;;
+  margin-bottom: 35px !important;;
+  background: #fff !important;
+  display: block;
+  width: 100% !important;
+}
+.main--step-rectf form input,.main--step-rectf form textarea {
+  color: rgba(51, 51, 51, 0.30) !important;
+  font-size: 18px !important;
+  font-style: normal !important;
+  font-family: "Kanit" !important;
+  font-weight: 400 !important;
+  line-height: 27px !important;
+}
+.main--step-rectf form .description {
+  color: rgba(51, 51, 51, 0.50) !important;
+  font-size: 15px !important;
+  font-family: "Kanit" !important;
+  font-style: normal;
+  font-weight: 400 !important;
+  line-height: 150% !important;
+}
+.main--step-rectf form input[type="submit"] {
+  background: var(--dgrad-bleu, linear-gradient(138deg, rgba(98, 146, 158, 0.80) 0%, #62929E 100%)) !important;
+  color: #FFF !important;
+}
+/* end rectf */
+.main--step-rectf .node-site-form .form-text {
+  background: #fff !important;
+}
+
+.main--step-rectf form  .sitename-container input {
+  width: 220px!important;
+}
+.descriptionsitename{
+  margin-top: -28px;
+  font-size: 13px;
+}
+@media only screen and (max-width: 765px) {
+  #mz-ps-0{
+      padding-left: 0 !important;
+  }
+}
+
+.main-step .login_process form input{
+  border: 1px solid !important;    
+}
+
+.main-step .login_process {
+  background-color: #F6F6F6!important;
+}
+
+.login_process #edit-name--description,
+.login_process #edit-pass--description {
+  display: none;
+}
+</style>
+   
+   {% include 'themes/custom/staydirect_install/templates/inc/header_process.html.twig'  %}
+    
+    {{ attach_library('staydirect/maintenance') }}
+    {{ attach_library('claro/global-styling') }}
+    {{ attach_library('staydirect_install/global-styling') }} 
+    <main class="main-step main-step-specification main-simple main-order main--step-rectf">
+        <div class="container container-and">
+            <div class="row mb-5">
+                  {% if not is_login() %}
+                     <div class="m-auto col-md-6  px-4 login_process">{{user_login()}} </div>
+                  {% else %}   
+                     
+                <div class="sidebar col-md-4 order-sm-first">
+                   {% set active_user = 'active' %}  
+                   {% include 'themes/custom/staydirect_install/templates/inc/menu_process.html.twig'  %}
+                </div>
+                <div class="col-md-8">
+                    <div class="row form-payment">
+                        <div class="col-md-12 col-lg-12 choosecontent">
+                         
+                            {{ render_form_entity('node','site') }}
+                        </div>
+                    </div>
+                </div>
+               {% endif %}
+            </div>
+        </div>
+    </main>
+
+    {% endif %}

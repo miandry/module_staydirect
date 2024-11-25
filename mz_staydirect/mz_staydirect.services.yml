@@ -7,3 +7,10 @@ services:
     class: Drupal\mz_staydirect\EventSubscriber\RedirectSubscriber
     tags:
       - { name: event_subscriber }    
+  mz_staydirect.user_login_redirect_subscriber:
+    class: Drupal\mz_staydirect\EventSubscriber\UserLoginRedirectSubscriber
+    tags:
+      - { name: event_subscriber }    
+  mz_staydirect.manage:
+    class: Drupal\mz_staydirect\StayDirectService
+    arguments: []    

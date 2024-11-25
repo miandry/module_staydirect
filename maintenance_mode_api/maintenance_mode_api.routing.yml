@@ -1,0 +1,9 @@
+
+maintenance_mode_api.toggle:
+  path: '/set/9E95781791DAD5712B9DC78E2C975'
+  defaults:
+    _controller: '\Drupal\maintenance_mode_api\Controller\MaintenanceModeController::toggle'
+    _title: 'Toggle Maintenance Mode'
+  requirements:
+    _permission: 'access content'
+  methods: ['GET']
