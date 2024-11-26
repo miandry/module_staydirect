@@ -117,6 +117,21 @@ function mz_staydirect_preprocess_html(&$variables) {
   if(isset($params['cache']) && $params['cache']==1 ){
     drupal_flush_all_caches();
   }
+
+  $config = \Drupal::config('mz_staydirect.settings');
+  $ckeck_database = $config->get('ckeck_database');
+  if($ckeck_database == NULL){
+     $service_manage = \Drupal::service('mz_staydirect.manage');
+     $status = $service_manage->checkDrupalRequiredTables('default');
+     if($status == 1){
+        header("Location: https://staydirecttech.com/order");
+        exit();
+     }
+     \Drupal::configFactory()->getEditable('mz_staydirect.settings')
+     ->set('ckeck_database','ready')
+    ->save();
+  }
+
 }
 
 /**

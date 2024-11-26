@@ -17,9 +17,8 @@ class StayDirectService {
 
   function checkDrupalRequiredTables($externalbd) {
     $required_tables = [
-      'config', 'key_value', 'users', 'users_field_data', 'role', 'user__roles',
-      'node', 'node_field_data', 'taxonomy_term_data', 'file_managed', 'system',
-      'field_config', 'field_config_instance', 'cache_default', 'cache_config',
+      'key_value', 'users', 'users_field_data', 'user__roles',
+      'node', 'node_field_data', 'taxonomy_term_data'
     ];
     $missing_tables = [];
     try {
@@ -35,14 +34,14 @@ class StayDirectService {
       }
       // Return the results.
       if (empty($missing_tables)) {
-        return true;
+        return false;
       } 
     } catch (\Exception $e) {
       $message = 'Error connecting to the database: ' . $e->getMessage() ;
       \Drupal::logger( 'mz_staydirect' )->error( $message );
      
     }
-    return false ;
+    return true ;
   }
 
 }
