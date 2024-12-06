@@ -4,6 +4,7 @@ namespace Drupal\mz_staydirect;
 
 
 use Drupal\Core\Database\Database;
+use Drupal\user\Entity\User;
 
 /**
  * Class DefaultService.
