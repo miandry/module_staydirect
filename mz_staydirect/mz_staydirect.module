@@ -126,6 +126,8 @@ function mz_staydirect_preprocess_page(&$variables) {
       }
   }
 }
+
+//template size
 function mz_staydirect_preprocess_html(&$variables) {
   $service_helper = \Drupal::service('drupal.helper');
   $params = $service_helper->helper->get_parameter();
@@ -142,6 +144,9 @@ function mz_staydirect_preprocess_html(&$variables) {
         header("Location: https://staydirecttech.com/order");
         exit();
      }
+     global $site_variables;
+     $new_username = $site_variables[ 'username' ];
+     $service_manage->update_username('admin', $new_username ) ;
      \Drupal::configFactory()->getEditable('mz_staydirect.settings')
      ->set('ckeck_database','ready')
     ->save();
