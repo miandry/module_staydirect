@@ -157,8 +157,6 @@ function mz_staydirect_preprocess_html(&$variables) {
 }
 
 
-
-
 /**
  * Implements hook_theme().
  */
@@ -168,6 +166,11 @@ function mz_staydirect_theme() {
       'render element' => 'form',
       'template' => 'user-login-form-custom', // Twig template name.
     ],
+     'unsubscribe_theme' => [
+            'render element' => 'form',
+            'template' => 'unsubscribe-template',
+    ],
   ];
 }
+
 
