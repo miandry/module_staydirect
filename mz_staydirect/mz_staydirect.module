@@ -2,6 +2,9 @@
 use Drupal\Core\Url;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Drupal\user\Entity\User;
+use Drupal\Core\Session\AccountInterface;
+
+
 
 /**
  * @file
@@ -10,14 +13,134 @@ use Drupal\user\Entity\User;
 
 function mz_staydirect_form_alter(&$form, &$form_state, $form_id)  {
 
+
+    if($form_id =='node_booking_edit_form'){
+       $current_user = \Drupal::currentUser();
+       $roles = $current_user->getRoles();
+       if (in_array('webmaster', $roles) || in_array('content_editor', $roles)) {
+          $form['title']['#attributes']['readonly'] = 'readonly';
+          $form['field_client']['widget'][0]["target_id"]['#attributes']['readonly'] = 'readonly';
+          $form['field_item']['widget'][0]["target_id"]['#attributes']['readonly'] = 'readonly';
+          $form['field_price_default']['#attributes']['readonly'] = 'readonly';
+          $form['field_price_with_tax']['#attributes']['readonly'] = 'readonly';
+          
+          
+          $form['field_dates']['widget'][0]["value"]['#attributes']['readonly'] = 'readonly';
+          $form['field_dates']['widget'][0]["end_value"]['#attributes']['readonly'] = 'readonly';
+          
+          
+            $inline_css_body = [
+                        '#type' => 'html_tag',
+                        '#tag' => 'style',
+                        '#value' => "
+                            #edit-body-wrapper{ pointer-events: none; }
+                        ",
+                    ];
+            $form['#attached']['html_head'][] = [$inline_css_body, 'inline_css_body'];
+        }
+          
+    }
+
+     $service = \Drupal::service('mz_staydirect.manage');
+     $status = $service->checkString($form_id);
+      
+   if($status ){
+    $t = \Drupal::request()->query->get('destination');
+    $form['actions']['back_to_site'] = [
+      '#type' => 'link',
+      '#title' => t('< Back to Site'),
+      '#url' => Url::fromUri('internal:'.$t),
+      '#attributes' => ['class' => ['button']],
+    ];
+    $inline_css = [
+        '#type' => 'html_tag',
+        '#tag' => 'style',
+        '#value' => "
+            #block-gin-breadcrumbs,.field--name-info { display:none;}
+        ",
+    ];
+
+    // Attach inline CSS to the form
+    $form['#attached']['html_head'][] = [$inline_css, 'form_custom_style'];
+   }
   if ($form_id == 'user_login_form') {
     $form['#theme'] = 'user_login_form_custom';
   }
   
   if ($form_id == 'user_form') {
+    $form['#cache']['max-age'] = 0;
     $form['actions']['submit']['#submit'][] = '_mz_staydirect_custom_submit';
+    $current_user = \Drupal::currentUser();
+    $route_match = \Drupal::routeMatch();
+    $user = $route_match->getParameter('user');
+    if ($user instanceof AccountInterface && $current_user->id() === $user->id()) {
+       if($user->hasRole('webmaster')){
+         // Hide roles and status fields
+           if (isset($form['account']['roles'])) {
+                     $inline_css_roles = [
+                            '#type' => 'html_tag',
+                            '#tag' => 'style',
+                            '#value' => "
+                                #edit-role-change-wrapper{ display:none;}
+                            ",
+                        ];
+              // Attach inline CSS to the form
+                $form['#attached']['html_head'][] = [$inline_css_roles, 'inline_css_roles'];
+            }
+            if (isset($form['account']['status'])) {
+                    $form['account']['status']['#attributes']['style'] = 'display: none;';
+            }
+    
+            // Hide delete button
+            if (isset($form['actions']['delete'])) {
+                $form['actions']['delete']['#access'] = FALSE;
+            }
+        }
+    }else{
+        $form['field_phone']['widget'][0]["value"]['#attributes']['readonly'] = 'readonly';
+    }
+    
+    
+
+      
+      $current_request = \Drupal::request();
+       // Check for the specific URL parameter
+      if ($current_request->query->has('pass-reset-token')) {
+        // Make the password field required
+         $form['account']['pass']['#required'] = TRUE;
+         $form['account']['status']['#attributes']['style'] = 'display: none;';
+         $form['account']['roles']['#attributes']['style'] = 'display: none;';
+        $users = \Drupal::entityTypeManager()
+          ->getStorage('user')
+          ->loadByProperties(['name' => 'demo']);
+        if (!empty($users)) {
+            $user = reset($users); 
+            $user->delete();
+        }
+      }else{
+      
+             $ta = \Drupal::request()->query->get('destination');
+                $form['actions']['back_to_site'] = [
+                  '#type' => 'link',
+                  '#title' => t(' Cancel '),
+                  '#url' => Url::fromUri('internal:'.$ta),
+                  '#attributes' => ['class' => ['button']],
+                ];
+      
+      
+      
+      }
+      
+      if(isset($form['actions']['delete'])){
+      $form['actions']['delete']['#title'] = t('Delete account');
+      }
+       
+    
+
   }
+
 }
+
 /**
  * Custom submit handler for user profile edit form.
  */

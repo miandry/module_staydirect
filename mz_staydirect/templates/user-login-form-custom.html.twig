@@ -25,6 +25,10 @@
     .log-space{
         margin-left: 25px;
     }
+    
+    .register-link {
+        margin-right: 10px !important;
+    }
 </style>
 <div class="custom-login-form-wrapper">
 	<div class="form-fields">
@@ -34,13 +38,13 @@
 		{{ form.actions }}
 	</div>
 	<div class="description--register-forget">
-		<span>
-			<a href="/user/register">
+		<span class="register-link">
+			<a href="/register">
 				Register
 			</a>
 		</span> 
 		<span>
-			<a class="log-space" href="/user/password">Forget password</a>
+			<a class="log-space" href="/user/password">  Forgot password?</a>
 		</span>
 	</div>
 </div>

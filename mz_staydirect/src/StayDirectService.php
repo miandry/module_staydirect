@@ -15,6 +15,19 @@ class StayDirectService {
    */
   public function __construct() {
   }
+  
+  public function  checkString($str) {
+
+    // Regex pattern to match strings starting with 'block_content_' and ending with '_edit_form'
+    $pattern = '/^block_content_.*_edit_form$/';
+
+    // Check if the string matches the pattern
+    if (preg_match($pattern, $str)) {
+        return true;
+    } else {
+        return false;
+    }
+  } 
 
   function checkDrupalRequiredTables($externalbd) {
     $required_tables = [
