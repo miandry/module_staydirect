@@ -49,7 +49,7 @@ function mz_staydirect_form_alter(&$form, &$form_state, $form_id)  {
     $form['actions']['back_to_site'] = [
       '#type' => 'link',
       '#title' => t('< Back to Site'),
-      '#url' => Url::fromUri('internal:'.$t),
+      '#url' => Url::fromUri('internal:/'.$t),
       '#attributes' => ['class' => ['button']],
     ];
     $inline_css = [
@@ -66,7 +66,7 @@ function mz_staydirect_form_alter(&$form, &$form_state, $form_id)  {
   if ($form_id == 'user_login_form') {
     $form['#theme'] = 'user_login_form_custom';
   }
-  
+
   if ($form_id == 'user_form') {
     $form['#cache']['max-age'] = 0;
     $form['actions']['submit']['#submit'][] = '_mz_staydirect_custom_submit';
@@ -96,6 +96,11 @@ function mz_staydirect_form_alter(&$form, &$form_state, $form_id)  {
                 $form['actions']['delete']['#access'] = FALSE;
             }
         }
+        $form['actions']['submit']['#submit'][] = '_mz_staydirect_redirect_submit';
+
+        
+        
+        
     }else{
         $form['field_phone']['widget'][0]["value"]['#attributes']['readonly'] = 'readonly';
     }
@@ -106,17 +111,22 @@ function mz_staydirect_form_alter(&$form, &$form_state, $form_id)  {
       $current_request = \Drupal::request();
        // Check for the specific URL parameter
       if ($current_request->query->has('pass-reset-token')) {
-        // Make the password field required
-         $form['account']['pass']['#required'] = TRUE;
-         $form['account']['status']['#attributes']['style'] = 'display: none;';
-         $form['account']['roles']['#attributes']['style'] = 'display: none;';
-        $users = \Drupal::entityTypeManager()
-          ->getStorage('user')
-          ->loadByProperties(['name' => 'demo']);
-        if (!empty($users)) {
-            $user = reset($users); 
-            $user->delete();
-        }
+        
+                    global $site_variables;
+                 if ($user instanceof AccountInterface && $current_user->id() === $user->id() && $current_user->id() === $site_variables['username']) {
+                    $form['account']['mail']['#default_value'] = $site_variables['email'];
+                 }
+                 // Make the password field required
+                 $form['account']['pass']['#required'] = TRUE;
+                 $form['account']['status']['#attributes']['style'] = 'display: none;';
+                 $form['account']['roles']['#attributes']['style'] = 'display: none;';
+                $users = \Drupal::entityTypeManager()
+                  ->getStorage('user')
+                  ->loadByProperties(['name' => 'demo']);
+                if (!empty($users)) {
+                    $user = reset($users); 
+                    $user->delete();
+                }
       }else{
       
              $ta = \Drupal::request()->query->get('destination');
@@ -140,7 +150,18 @@ function mz_staydirect_form_alter(&$form, &$form_state, $form_id)  {
   }
 
 }
-
+/**
+ * Custom submit handler for user profile edit form.
+ */
+function _mz_staydirect_redirect_submit(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+      $d = \Drupal::request()->query->get('destination');
+      if($d == NULL){
+          $external_url = "/user";
+          $response = new RedirectResponse($external_url, 302);
+          $response->send();
+          return;
+       }
+}
 /**
  * Custom submit handler for user profile edit form.
  */
