@@ -70,11 +70,13 @@ function mz_staydirect_form_alter(&$form, &$form_state, $form_id)  {
   if ($form_id == 'user_form') {
     $form['#cache']['max-age'] = 0;
     $form['actions']['submit']['#submit'][] = '_mz_staydirect_custom_submit';
+     $form['actions']['submit']['#submit'][] = '_mz_staydirect_redirect_submit';
+
     $current_user = \Drupal::currentUser();
     $route_match = \Drupal::routeMatch();
     $user = $route_match->getParameter('user');
     if ($user instanceof AccountInterface && $current_user->id() === $user->id()) {
-       if($user->hasRole('webmaster')){
+        if($user->hasRole('webmaster')){
          // Hide roles and status fields
            if (isset($form['account']['roles'])) {
                      $inline_css_roles = [
@@ -96,8 +98,7 @@ function mz_staydirect_form_alter(&$form, &$form_state, $form_id)  {
                 $form['actions']['delete']['#access'] = FALSE;
             }
         }
-        $form['actions']['submit']['#submit'][] = '_mz_staydirect_redirect_submit';
-
+       
         
         
         
@@ -111,11 +112,27 @@ function mz_staydirect_form_alter(&$form, &$form_state, $form_id)  {
       $current_request = \Drupal::request();
        // Check for the specific URL parameter
       if ($current_request->query->has('pass-reset-token')) {
-        
-                    global $site_variables;
-                 if ($user instanceof AccountInterface && $current_user->id() === $user->id() && $current_user->id() === $site_variables['username']) {
-                    $form['account']['mail']['#default_value'] = $site_variables['email'];
-                 }
+                 global $site_variables;
+                 $username = $current_user->getAccountName() ;
+                // if ($user instanceof AccountInterface && $current_user->id() === $user->id() &&  $username == $site_variables['username']) {
+                        $form['account']['mail']['#default_value'] = $site_variables['email'];
+                                    $inline_css_hide = [
+                                    '#type' => 'html_tag',
+                                    '#tag' => 'style',
+                                    '#value' => "
+                                        input.username{background-color: lightgray;}.form-item--mail,.gin-secondary-toolbar ,.tabs-wrapper.is-horizontal,#toolbar-administration{ display:none;}.page-wrapper.dialog-off-canvas-main-canvas{margin-left: -240px;}
+                                    ",
+                                ];
+                              // Attach inline CSS to the form
+                                $form['#attached']['html_head'][] = [$inline_css_hide, 'inline_css_hide'];
+                                $form['field_first_name']['#attributes']['style'] = 'display: none;';
+                                $form['field_last_name']['#attributes']['style'] = 'display: none;';
+                                $form['field_phone']['#attributes']['style'] = 'display: none;';
+                                $form['account']['name']['#attributes']['readonly'] = 'readonly';
+                          
+                         
+                // }
+             
                  // Make the password field required
                  $form['account']['pass']['#required'] = TRUE;
                  $form['account']['status']['#attributes']['style'] = 'display: none;';
@@ -124,6 +141,7 @@ function mz_staydirect_form_alter(&$form, &$form_state, $form_id)  {
                   ->getStorage('user')
                   ->loadByProperties(['name' => 'demo']);
                 if (!empty($users)) {
+                    
                     $user = reset($users); 
                     $user->delete();
                 }
