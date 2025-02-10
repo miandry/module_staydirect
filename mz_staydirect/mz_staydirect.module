@@ -120,7 +120,7 @@ function mz_staydirect_form_alter(&$form, &$form_state, $form_id)  {
                                     '#type' => 'html_tag',
                                     '#tag' => 'style',
                                     '#value' => "
-                                        input.username{background-color: lightgray;}.form-item--mail,.gin-secondary-toolbar ,.tabs-wrapper.is-horizontal,#toolbar-administration{ display:none;}.page-wrapper.dialog-off-canvas-main-canvas{margin-left: -240px;}
+                                        input.username{background-color: lightgray;},.gin-secondary-toolbar ,.tabs-wrapper.is-horizontal,#toolbar-administration{ display:none;}.page-wrapper.dialog-off-canvas-main-canvas{margin-left: -240px;}
                                     ",
                                 ];
                               // Attach inline CSS to the form
