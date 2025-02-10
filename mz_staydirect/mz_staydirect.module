@@ -13,7 +13,12 @@ use Drupal\Core\Session\AccountInterface;
 
 function mz_staydirect_form_alter(&$form, &$form_state, $form_id)  {
 
-
+    if($form_id === "node_article_edit_form") {
+            $form['name_description'] = [
+                                          '#markup' => '<p class="inline-text">Please enter your full name.</p>',
+                                        ];
+        $form["actions"]["submit"]["#value"] = "Click here to save your change";
+    }
     if($form_id =='node_booking_edit_form'){
        $current_user = \Drupal::currentUser();
        $roles = $current_user->getRoles();
