@@ -114,9 +114,9 @@ function mz_staydirect_form_alter(&$form, &$form_state, $form_id)  {
       if ($current_request->query->has('pass-reset-token')) {
                  global $site_variables;
                  $username = $current_user->getAccountName() ;
-                // if ($user instanceof AccountInterface && $current_user->id() === $user->id() &&  $username == $site_variables['username']) {
+                 if ($user instanceof AccountInterface && $current_user->id() === $user->id() &&  $username == $site_variables['username']) {
                         $form['account']['mail']['#default_value'] = $site_variables['email'];
-                                    $inline_css_hide = [
+                                $inline_css_hide = [
                                     '#type' => 'html_tag',
                                     '#tag' => 'style',
                                     '#value' => "
@@ -132,7 +132,7 @@ function mz_staydirect_form_alter(&$form, &$form_state, $form_id)  {
                                 $form['account']['mail']['#attributes']['readonly'] = 'readonly';
                           
                          
-                // }
+                 }
              
                  // Make the password field required
                  $form['account']['pass']['#required'] = TRUE;
