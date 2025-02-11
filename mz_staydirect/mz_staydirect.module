@@ -15,7 +15,8 @@ function mz_staydirect_form_alter(&$form, &$form_state, $form_id)  {
 
     if($form_id === "node_article_edit_form") {
             $form['name_description'] = [
-                                          '#markup' => '<p class="inline-text">Please enter your full name.</p>',
+                                          '#markup' => '<p id="mz-alert">To save your changes, please click the <strong>Save</strong> button located in the top-right corner.</p>',
+                                          '#weight' => -10,
                                         ];
         $form["actions"]["submit"]["#value"] = "Click here to save your change";
     }
