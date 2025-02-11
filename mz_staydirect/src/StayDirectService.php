@@ -85,6 +85,54 @@ class StayDirectService {
     } else {
         \Drupal::logger( 'mz_staydirect' )->warning( 'No user found with the given username.' );
     }
+  }
+
+  function deleteDemoUser(){
+    $users = \Drupal::entityTypeManager()
+    ->getStorage('user')
+    ->loadByProperties(['name' => 'demo']);
+    if (!empty($users)) {
+        $user = reset($users); 
+        $user->delete();
+    } 
+  }
+  public function toggle_maintenance_mode($enable) {
+    $state = \Drupal::state();
+    if ($enable) {
+      $state->set('system.maintenance_mode', TRUE);
+      \Drupal::messenger()->addMessage('The site is now in maintenance mode.');
+    } else {
+      $state->set('system.maintenance_mode', FALSE);
+      \Drupal::messenger()->addMessage('The site is no longer in maintenance mode.');
+    }
+    drupal_flush_all_caches();
+
+  }
+  public function executeJsonSite($site_name){
+    $path = DRUPAL_ROOT.'/sites/default/files/sites/' ;
+    $file = $site_name.'.json';
+    $file_path =  $path. $file;
+
+    if ( file_exists( $file_path ) ) {
+        // Get the contents of the JSON file.
+        $json_content = file_get_contents( $file_path );
+        // Decode the JSON content into a PHP array.
+        $data = json_decode( $json_content, TRUE );
+        if($data["value"]["status"] == 0 && 
+           \Drupal::state()->get('system.maintenance_mode') == 0){
+          $this->toggle_maintenance_mode(TRUE);
+        }
+        if($data["value"]["status"] == 1 && 
+            \Drupal::state()->get('system.maintenance_mode') == 1){
+            $this->toggle_maintenance_mode(FALSE);
+        }
+
+    } else {
+        \Drupal::logger( 'mz_staydirect' )->error( 'Failed  JsonConfig not exist in '.$file_path );
+
+        return false ;
+
+    }
 }
 
 }
