@@ -92,8 +92,8 @@ class StayDirectService {
     ->getStorage('user')
     ->loadByProperties(['name' => 'demo']);
     if (!empty($users)) {
-        $user = reset($users); 
-        $user->delete();
+      $user = reset($users); 
+      $user->delete();
     } 
   }
   public function toggle_maintenance_mode($enable) {
