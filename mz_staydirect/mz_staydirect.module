@@ -12,7 +12,6 @@ use Drupal\Core\Session\AccountInterface;
  */
 
 function mz_staydirect_form_alter(&$form, &$form_state, $form_id)  {
-
     if($form_id === "node_article_edit_form") {
             $form['name_description'] = [
                                           '#markup' => '<p id="mz-alert">To save your changes, please click the <strong>Save</strong> button located in the top-right corner.</p>',
@@ -367,3 +366,4 @@ function mymodule_custom_redirect_submit(&$form, \Drupal\Core\Form\FormStateInte
   // Redirect to user login page after submission.
   $form_state->setRedirect('user.login');
 }
+
