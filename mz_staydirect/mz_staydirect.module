@@ -3,7 +3,7 @@ use Drupal\Core\Url;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Drupal\user\Entity\User;
 use Drupal\Core\Session\AccountInterface;
-
+use Drupal\Core\Render\Markup;
 
 /**
  * Custom submit handler for the login form.
@@ -318,7 +318,22 @@ function mz_staydirect_preprocess_html(&$variables) {
   if(isset($params['cache']) && $params['cache']==1 ){
     drupal_flush_all_caches();
   }
+  
+  $current_user = \Drupal::currentUser();
+  $is_backend = \Drupal::service('router.admin_context')->isAdminRoute();
+  $has_webmaster_role = in_array('webmaster', $current_user->getRoles());
+  $stripe_config = \Drupal::config('mz_payement.stripe')->get('status');
+  $status_pay = \Drupal::config('mz_payement.status')->get('status');
 
+  if ($is_backend && $has_webmaster_role && $status_pay == "confirmed" && $stripe_config != "complet") {
+    $html = '<div style="padding: 10px;color: red;font-weight: 700;position: fixed;right: 15px;bottom: 15px;border: 1px solid red;z-index: 99999;background: #f8fafe;" class="text-center my-custom-banner">Please update your bank account details as they are required. <a href="/admin/bank/page"> Click here </a></div>';
+    $variables['page_top']['custom_html'] = [
+      '#markup' => Drupal\Core\Render\Markup::create($html),
+      '#weight' => -1000,
+    ];
+    // Your code here if all conditions are met
+  }
+  
   global $site_variables;
 
   if(isset($site_variables['email']) && isset($site_variables['username']) && isset($site_variables['site_name'])){
