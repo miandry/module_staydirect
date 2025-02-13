@@ -120,8 +120,9 @@ function mz_staydirect_form_alter(&$form, &$form_state, $form_id)  {
       if ($current_request->query->has('pass-reset-token')) {
                  global $site_variables;
                  $username = $current_user->getAccountName() ;
-                 if ($user instanceof AccountInterface && $current_user->id() === $user->id() &&  $username == $site_variables['username']) {
-                        $form['account']['mail']['#default_value'] = $site_variables['email'];
+                 if ($user instanceof AccountInterface && $current_user->id() === $user->id()) {
+              
+                       $form['account']['mail']['#default_value'] = $site_variables['email'];
                                 $inline_css_hide = [
                                     '#type' => 'html_tag',
                                     '#tag' => 'style',
@@ -138,16 +139,17 @@ function mz_staydirect_form_alter(&$form, &$form_state, $form_id)  {
                                 $form['account']['mail']['#attributes']['readonly'] = 'readonly';
                           
                          
-                 }
+                 
              
                  // Make the password field required
                  $form['account']['pass']['#required'] = TRUE;
                  $form['account']['status']['#attributes']['style'] = 'display: none;';
                  $form['account']['roles']['#attributes']['style'] = 'display: none;';
-  
-
-                 $service = \Drupal::service('mz_staydirect.manage');
-                 $service->deleteDemoUser();
+                 }
+                 if ($user instanceof AccountInterface && $current_user->id() === $user->id() &&  $username == $site_variables['username']) {           
+                   $service = \Drupal::service('mz_staydirect.manage');
+                   $service->deleteDemoUser();
+                 }
 
       }else{
       
