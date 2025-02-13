@@ -5,6 +5,15 @@ use Drupal\user\Entity\User;
 use Drupal\Core\Session\AccountInterface;
 
 
+/**
+ * Custom submit handler for the login form.
+ */
+function mymodule_custom_login_redirect($form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  $query = \Drupal::request()->query;
+  if ($query->has('getstarted') && $query->get('getstarted') == '1') {
+    $form_state->setRedirectUrl(\Drupal\Core\Url::fromUri('internal:/order'));
+  }
+}
 
 /**
  * @file
@@ -12,6 +21,10 @@ use Drupal\Core\Session\AccountInterface;
  */
 
 function mz_staydirect_form_alter(&$form, &$form_state, $form_id)  {
+         if ($form_id == 'user_login_form') {
+      $form['#submit'][] = 'mymodule_custom_login_redirect';
+    }
+    
     if($form_id === "node_article_edit_form") {
             $form['name_description'] = [
                                           '#markup' => '<p id="mz-alert">To save your changes, please click the <strong>Save</strong> button located in the top-right corner.</p>',
