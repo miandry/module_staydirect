@@ -69,40 +69,10 @@ class unsubscribeForm extends FormBase
   { 
     $values = $form_state->getValues();
     if(isset($values["id"])){
-      $id = $values["id"];
-      $site = \Drupal::entityTypeManager()->getStorage('node')->load($id);
-      $message = 'Failed to unSubscribe';
-      $status = false ;
-      if(is_object($site)){
-        $current_user = \Drupal::currentUser();
-        $current_user_id =  $current_user->id();
-        $node_author_id = $site->getOwnerId();
-        $roles = $current_user->getRoles();
-        if($current_user_id === $node_author_id || 
-          in_array('admin',  $roles) || 
-          in_array('webmaster',  $roles)) {
-          $service = \Drupal::service('mz_payment.manager');
-          $result = $service->executeUnSubscription($site);
-          if($result){
-            $message = 'You have sucessfully unSubscribe ';
-            \Drupal::messenger()->addMessage($message);
-          }else{
-            $message = 'Failed unSubscribe in STRIPE with id='.$subscriptionId;
-            \Drupal::logger('mz_staydirect')->error($message);
-          }
-          $base_url = \Drupal::request()->getSchemeAndHttpHost();
-          $url =    $base_url.'/user';
-          $response = new RedirectResponse($url);
-          $response->send();
-      
-        } else {
-
-          $message = 'You dont have permission  to unSubscribe !! , please the website admin';
-          $status = false ;
-
-        }
-    
-      }
+        $subscription_id = $values["id"];
+        $message = 'Failed to unSubscribe';
+        $service = \Drupal::service('mz_staydirect.manage');
+        $result = $service->executeUnSubscription($subscription_id);   
     }
   }
   private  function include_template($id,$var){

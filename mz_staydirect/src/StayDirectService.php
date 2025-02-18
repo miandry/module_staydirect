@@ -134,5 +134,54 @@ class StayDirectService {
 
     }
 }
+function executeUnSubscription($subscription_id){
+  $query = \Drupal::entityQuery('node')
+  ->condition('type', 'booking') // Assuming the content type is 'article'.
+  ->condition('field_subscription_id', $subscription_id, '=')
+  ->range(0,1);
+  $nids = $query->execute();
+
+  if(!empty($nids)){
+    $nid = end($nids);
+    $booking = \Drupal::entityTypeManager()->getStorage('node')->load($nid);
+    $site = $booking->field_item->entity ;
+    $current_user = \Drupal::currentUser();
+    $current_user_id =  $current_user->id();
+    $node_author_id = $site->getOwnerId();
+
+    $service = \Drupal::service('mz_payment.manager');
+
+
+  if($current_user_id === $node_author_id) {
+
+    $result = $service->unSubscription($subscription_id);
+ 
+    if($result == "canceled") {
+      $site->set('status', 0); 
+      $site->save();
+      $service->unsubscribeSendEmail($site);
+      $fields['title'] = $subscription_id ;
+      $fields['field_item'] = $booking->id(); 
+      $fields['notes'] = "no reason"; 
+      $unsubscribe_node = \Drupal::service('crud')->save('node', 'unsubscribe', $fields);
+      $message = 'You have successfully unsubscribed.';
+      \Drupal::messenger()->addMessage($message);
+    }else{
+      $message = 'Failed unSubscribe in STRIPE with id='.$subscriptionId;
+      \Drupal::logger('mz_staydirect')->error($message);
+    }
+
+    $base_url = \Drupal::request()->getSchemeAndHttpHost();
+    $url =    $base_url.'/user';
+    $response = new RedirectResponse($url);
+    $response->send();
+  } else {
+    $message = 'You do not have permission to unsubscribe. Please contact the website administrator.';
+    \Drupal::messenger()->addMessage($message);
+  }
+}
+
+
+}
 
 }
