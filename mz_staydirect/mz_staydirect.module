@@ -133,15 +133,17 @@ function mz_staydirect_form_alter(&$form, &$form_state, $form_id)  {
                  global $site_variables;
                  $username = $current_user->getAccountName() ;
                  if ($user instanceof AccountInterface && $current_user->id() === $user->id()) {
-              
-                       $form['account']['mail']['#default_value'] = $site_variables['email'];
-                                $inline_css_hide = [
-                                    '#type' => 'html_tag',
-                                    '#tag' => 'style',
-                                    '#value' => "
-                                       input#edit-mail,input.username{background-color: lightgray;}.gin-secondary-toolbar,.tabs-wrapper.is-horizontal,#toolbar-administration{ display:none!important;}.page-wrapper.dialog-off-canvas-main-canvas{margin-left: -240px;}
-                                    ",
-                                ];
+                       if(isset( $site_variables['email'])){
+                        $form['account']['mail']['#default_value'] = $site_variables['email'];         
+                       }
+           
+                       $inline_css_hide = [
+                        '#type' => 'html_tag',
+                        '#tag' => 'style',
+                        '#value' => "
+                           input#edit-mail,input.username{background-color: lightgray;}.gin-secondary-toolbar,.tabs-wrapper.is-horizontal,#toolbar-administration{ display:none!important;}.page-wrapper.dialog-off-canvas-main-canvas{margin-left: -240px;}
+                        ",
+                    ];
                               // Attach inline CSS to the form
                                 $form['#attached']['html_head'][] = [$inline_css_hide, 'inline_css_hide'];
                                 $form['field_first_name']['#attributes']['style'] = 'display: none;';
@@ -158,10 +160,11 @@ function mz_staydirect_form_alter(&$form, &$form_state, $form_id)  {
                  $form['account']['status']['#attributes']['style'] = 'display: none;';
                  $form['account']['roles']['#attributes']['style'] = 'display: none;';
                  }
-                 if ($user instanceof AccountInterface && $current_user->id() === $user->id() &&  $username == $site_variables['username']) {           
-                   $service = \Drupal::service('mz_staydirect.manage');
-                   $service->deleteDemoUser();
-                 }
+                 if ( isset($site_variables['username']) && $user instanceof AccountInterface && $current_user->id() === $user->id() &&  $username == $site_variables['username']) {           
+                  $service = \Drupal::service('mz_staydirect.manage');
+                  $service->deleteDemoUser();
+                }
+          
 
       }else{
       
