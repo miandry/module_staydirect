@@ -5,7 +5,7 @@ namespace Drupal\mz_staydirect;
 
 use Drupal\Core\Database\Database;
 use Drupal\user\Entity\User;
-
+use Symfony\Component\HttpFoundation\RedirectResponse;
 /**
  * Class DefaultService.
  */
@@ -167,7 +167,7 @@ function executeUnSubscription($subscription_id){
       $message = 'You have successfully unsubscribed.';
       \Drupal::messenger()->addMessage($message);
     }else{
-      $message = 'Failed unSubscribe in STRIPE with id='.$subscriptionId;
+      $message = 'Failed unSubscribe in STRIPE with id='.$subscription_id;
       \Drupal::logger('mz_staydirect')->error($message);
     }
 
