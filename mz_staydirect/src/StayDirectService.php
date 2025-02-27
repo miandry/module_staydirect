@@ -224,10 +224,11 @@ function executeUnSubscription($subscription_id){
 
         // Calculate the difference between dates
         $interval = $dateFrom->diff($dateTo);
-
-        // Display the number of days
-        $period = ceil($interval->days/30)*30;
-
+        if($interval->days > 0 ){
+          $period = ceil(($interval->days)/30)*30;
+        } else{
+          $period = 30 ;
+        }
         $endDate = clone $dateFrom;
         $endDate->modify('+'.$period.' days');
         return $endDate->format('Y-m-d'); 
