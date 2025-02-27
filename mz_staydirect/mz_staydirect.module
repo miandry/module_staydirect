@@ -290,7 +290,8 @@ function mz_staydirect_preprocess_block(&$variables) {
  */
 
 function mz_staydirect_cron() {
-  \Drupal::logger('mz_staydirect')->info('Tâche cron personnalisée exécutée à @time.', ['@time' => date('Y-m-d H:i:s')]);
+  $service_manage = \Drupal::service('mz_staydirect.manage');
+  $service_manage->disableUnsubscribeSite();
 } 
 
 /**

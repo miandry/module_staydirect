@@ -157,12 +157,20 @@ function executeUnSubscription($subscription_id){
     $result = $service->unSubscription($subscription_id);
  
     if($result == "canceled") {
-      $site->set('status', 0); 
+    //  $site->set('status', 0); 
+    //  $site->save();
+      $created_timestamp = $booking->getCreatedTime(); 
+      $created_date = date('Y-m-d', $created_timestamp); 
+      $end_date = $this->calculEndOfSubscriptionDate($created_date);
+      $site->set('field_date',$end_date);
       $site->save();
+
       $service->unsubscribeSendEmail($site);
       $fields['title'] = $subscription_id ;
       $fields['field_item'] = $booking->id(); 
+      $fields['field_date'] = $end_date; 
       $fields['notes'] = "no reason"; 
+
       $unsubscribe_node = \Drupal::service('crud')->save('node', 'unsubscribe', $fields);
       $message = 'You have successfully unsubscribed.';
       \Drupal::messenger()->addMessage($message);
@@ -183,5 +191,47 @@ function executeUnSubscription($subscription_id){
 
 
 }
+
+  function disableUnsubscribeSite(){
+     // $day_ago = strtotime("now");
+      $now = new \DateTime(); 
+      $day_ago =  $now->format('Y-m-d');
+      $nids = \Drupal::entityQuery('node')
+        ->condition('field_date', $day_ago, '<=') 
+        ->condition('type', 'unsubscribe')               
+        ->sort('nid','desc')
+        ->execute();
+        foreach ( $nids as $nid){
+          $unsubscribe = \Drupal::entityTypeManager()->getStorage('node')->load($nid);
+          if($unsubscribe->field_item && 
+              $unsubscribe->field_item->entity ){
+              $booking = ($unsubscribe->field_item->entity);
+              $site = $booking->field_item->entity ;
+              $site->set("status",0);
+              $site->save();
+              sleep(5);
+             }
+        }
+  }
+  function calculEndOfSubscriptionDate($definedDate) {
+
+          // Define the date in YYYY-MM-DD format
+       //$definedDate = '2025-03-10';
+
+        // Create DateTime objects for the defined date and the current date
+        $dateFrom = new \DateTime($definedDate);
+        $dateTo = new \DateTime('now');
+
+        // Calculate the difference between dates
+        $interval = $dateFrom->diff($dateTo);
+
+        // Display the number of days
+        $period = ceil($interval->days/30)*30;
+
+        $endDate = clone $dateFrom;
+        $endDate->modify('+'.$period.' days');
+        return $endDate->format('Y-m-d'); 
+
+  }
 
 }
