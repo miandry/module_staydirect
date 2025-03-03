@@ -162,6 +162,9 @@ function executeUnSubscription($subscription_id){
       $created_timestamp = $booking->getCreatedTime(); 
       $created_date = date('Y-m-d', $created_timestamp); 
       $end_date = $this->calculEndOfSubscriptionDate($created_date);
+      $booking->set('field_status_booking','completed');
+      $booking->save();
+
       $site->set('field_date',$end_date);
       $site->save();
 
