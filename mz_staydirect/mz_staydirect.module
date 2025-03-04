@@ -39,7 +39,7 @@ function mz_staydirect_form_alter(&$form, &$form_state, $form_id)  {
       $form['#submit'][] = 'mymodule_custom_login_redirect';
     }
     if($form_id == 'user_form'){
-      $form['#validate'][] = '_mz_staydirect_phone_number_validate';
+     // $form['#validate'][] = '_mz_staydirect_phone_number_validate';
     }
   
    // $form['field_phone']['#element_validate'][] = '_mz_staydirect_phone_number_validate';
