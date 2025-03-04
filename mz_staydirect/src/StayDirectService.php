@@ -138,6 +138,7 @@ function executeUnSubscription($subscription_id){
   $query = \Drupal::entityQuery('node')
   ->condition('type', 'booking') // Assuming the content type is 'article'.
   ->condition('field_subscription_id', $subscription_id, '=')
+  ->sort('created','DESC')
   ->range(0,1);
   $nids = $query->execute();
 
