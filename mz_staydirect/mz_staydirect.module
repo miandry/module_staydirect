@@ -23,10 +23,12 @@ function _mz_staydirect_phone_number_validate($form, FormStateInterface &$form_s
  
   $phone_number_array = $form_state->getValue('field_phone');
   $phone_number = $phone_number_array[0]['value'] ;
-  $pattern = '/^(?:\+1\s)?\(?(?:\d{3})\)?[\s.-]?\d{3}[\s.-]?\d{4}$/';
-  // Example validation: U.S. phone number format
-  if (!preg_match( $pattern, $phone_number)) {
-    $form_state->setErrorByName($phone_number, t('Please enter a valid phone number in the format: (xxx) xxx-xxxx.'));
+  if( $phone_number && trim($phone_number)!= ""){
+    $pattern = '/^(?:\+1\s)?\(?(?:\d{3})\)?[\s.-]?\d{3}[\s.-]?\d{4}$/';
+    // Example validation: U.S. phone number format
+    if (!preg_match( $pattern, $phone_number)) {
+      $form_state->setErrorByName($phone_number, t('Please enter a valid phone number in the format: (xxx) xxx-xxxx.'));
+    }
   }
 }
 /**
@@ -39,7 +41,7 @@ function mz_staydirect_form_alter(&$form, &$form_state, $form_id)  {
       $form['#submit'][] = 'mymodule_custom_login_redirect';
     }
     if($form_id == 'user_form'){
-     // $form['#validate'][] = '_mz_staydirect_phone_number_validate';
+      $form['#validate'][] = '_mz_staydirect_phone_number_validate';
     }
   
    // $form['field_phone']['#element_validate'][] = '_mz_staydirect_phone_number_validate';
