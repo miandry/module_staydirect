@@ -241,7 +241,7 @@ function executeUnSubscription($subscription_id){
   function setPermissionOfSite(){
     global $site_variables;
     $site_name = "/".$site_variables["site_name"];
-    $dst = DRUPAL_ROOT."/sites".$site_name  ;   
+    $dst = DRUPAL_ROOT."/sites".$site_name."/files" ;   
   
     // Prepare the command to change directory permissions
     $commandDir = "chmod -R 7777 ".$dst ;
