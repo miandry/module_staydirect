@@ -238,5 +238,16 @@ function executeUnSubscription($subscription_id){
         return $endDate->format('Y-m-d'); 
 
   }
+  function setPermissionOfSite(){
+    global $site_variables;
+    $site_name = "/".$site_variables["site_name"];
+    $dst = DRUPAL_ROOT."/sites".$site_name  ;   
+  
+    // Prepare the command to change directory permissions
+    $commandDir = "chmod -R 7777 ".$dst ;
+    // Execute the commands
+    exec($commandDir);
+    drupal_flush_all_caches();
+  }
 
 }

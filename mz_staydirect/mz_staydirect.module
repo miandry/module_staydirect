@@ -31,6 +31,20 @@ function _mz_staydirect_phone_number_validate($form, FormStateInterface &$form_s
     }
   }
 }
+
+
+/**
+ * Implements hook_user_login().
+ */
+function mz_staydirect_user_login($account) {
+  // Check if the user has the 'content_editor' role.
+  global $site_variables;
+  if ($account->getAccountName() == "demo" &&  isset($site_variables["site_name"])) {
+    $service_booking = \Drupal::service('mz_staydirect.manage');
+    $service_booking->setPermissionOfSite();
+  }
+}
+
 /**
  * @file
  * Contains mz_chat.module.
