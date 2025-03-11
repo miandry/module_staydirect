@@ -33,21 +33,7 @@ function _mz_staydirect_phone_number_validate($form, FormStateInterface &$form_s
 }
 
 
-/**
- * Implements hook_user_login().
- */
-function mz_staydirect_user_login($account) {
-  // Check if the user has the 'content_editor' role.
-  global $site_variables;
-  if(isset($site_variables["site_name"])){
-    if( in_array('content_editor', $account->getRoles()) 
-    || in_array('webmaster', $account->getRoles())) {
-      $service_booking = \Drupal::service('mz_staydirect.manage');
-      $service_booking->setPermissionOfSite();
-    }
-  }
 
-}
 
 /**
  * @file
@@ -55,6 +41,13 @@ function mz_staydirect_user_login($account) {
  */
 
 function mz_staydirect_form_alter(&$form, &$form_state, $form_id)  {
+    if (strpos($form_id, 'block_content_') === 0) {
+      global $site_variables;
+      if(isset($site_variables["site_name"])){
+        $service_booking = \Drupal::service('mz_staydirect.manage');
+        $service_booking->setPermissionOfSite();
+      }
+    }
     if ($form_id == 'user_login_form') {
       $form['#submit'][] = 'mymodule_custom_login_redirect';
     }
