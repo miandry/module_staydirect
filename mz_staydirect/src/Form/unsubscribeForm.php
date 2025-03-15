@@ -31,7 +31,6 @@ class unsubscribeForm extends FormBase
    */
   public function buildForm(array $form, FormStateInterface $form_state, $config_name = '')
   { $id = \Drupal::request()->query->get('id');
- 
     if($id == null ){
       $base_url = \Drupal::request()->getSchemeAndHttpHost();
       $url =    $base_url.'/user';

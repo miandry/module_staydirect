@@ -162,7 +162,9 @@ function executeUnSubscription($subscription_id){
     //  $site->save();
       $created_timestamp = $booking->getCreatedTime(); 
       $created_date = date('Y-m-d', $created_timestamp); 
-      $end_date = $this->calculEndOfSubscriptionDate($created_date);
+      $interval = $booking->interval->value ;
+      $interval_days = ( $interval == "month" ) ? 30 : 365 ;
+      $end_date = $this->calculEndOfSubscriptionDate($created_date,$interval_days);
       $booking->set('field_status_booking','cancel');
       $booking->save();
 
@@ -217,7 +219,7 @@ function executeUnSubscription($subscription_id){
              }
         }
   }
-  function calculEndOfSubscriptionDate($definedDate) {
+  function calculEndOfSubscriptionDate($definedDate,$interval = 30 ) {
 
           // Define the date in YYYY-MM-DD format
        //$definedDate = '2025-03-10';
@@ -229,9 +231,9 @@ function executeUnSubscription($subscription_id){
         // Calculate the difference between dates
         $interval = $dateFrom->diff($dateTo);
         if($interval->days > 0 ){
-          $period = ceil(($interval->days)/30)*30;
+          $period = ceil(($interval->days)/$interval)*$interval;
         } else{
-          $period = 30 ;
+          $period = $interval ;
         }
         $endDate = clone $dateFrom;
         $endDate->modify('+'.$period.' days');
