@@ -6,6 +6,8 @@ namespace Drupal\mz_staydirect;
 use Drupal\Core\Database\Database;
 use Drupal\user\Entity\User;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Drupal\Core\Url;
+
 /**
  * Class DefaultService.
  */
@@ -133,6 +135,22 @@ class StayDirectService {
         return false ;
 
     }
+}
+function setLoginRedirection($account){
+  $request = \Drupal::service('request_stack')->getCurrentRequest();
+
+  $current_request = \Drupal::request();
+  // Check for the specific URL parameter
+  if ($account->hasRole('webmaster') && !$current_request->query->has('pass-reset-token')) {
+    $redirect_url = "/admin/bookings";
+    $url = Url::fromUserInput($redirect_url);
+    if ($url instanceof Url) {
+      $request->query->set('destination', $url->toString());
+    }
+  }
+
+
+
 }
 function executeUnSubscription($subscription_id){
   $query = \Drupal::entityQuery('node')

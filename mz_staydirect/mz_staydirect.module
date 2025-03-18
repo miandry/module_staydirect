@@ -431,4 +431,9 @@ function mymodule_custom_redirect_submit(&$form, \Drupal\Core\Form\FormStateInte
   // Redirect to user login page after submission.
   $form_state->setRedirect('user.login');
 }
-
+/**
+ * Implements hook_user_login().
+ */
+function mz_staydirect_user_login(AccountInterface $account) {
+  \Drupal::service('mz_staydirect.manage')->setLoginRedirection($account);
+}
