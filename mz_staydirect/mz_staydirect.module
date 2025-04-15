@@ -437,3 +437,25 @@ function mymodule_custom_redirect_submit(&$form, \Drupal\Core\Form\FormStateInte
 function mz_staydirect_user_login(AccountInterface $account) {
   \Drupal::service('mz_staydirect.manage')->setLoginRedirection($account);
 }
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function mz_staydirect_form_node_article_edit_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Replace `article` with your actual content type machine name.
+
+  if (isset($form['field_price']['widget']["entities"])) {
+    
+    // Loop through all paragraph instances
+    foreach ($form['field_price']['widget']["entities"] as $delta => &$item) {
+      if (is_numeric($delta)) {
+          $object = $item["#entity"];
+         
+          $para = \Drupal::service('entity_parser.manager')->paragraph_parser($object);
+          $label = "Price is $".$para["field_price_value"] ." for " .$para["field_date"][0]["value"]." to ". $para["field_date"][0]["end_value"];
+          $item['#label'] = $label;
+        
+      }
+    }
+  }
+}
