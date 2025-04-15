@@ -452,9 +452,10 @@ function mz_staydirect_form_node_article_edit_form_alter(&$form, FormStateInterf
           $object = $item["#entity"];
          
           $para = \Drupal::service('entity_parser.manager')->paragraph_parser($object);
-          $label = "Price is $".$para["field_price_value"] ." for " .$para["field_date"][0]["value"]." to ". $para["field_date"][0]["end_value"];
-          $item['#label'] = $label;
-        
+          if(isset($para["field_price_value"]) && isset($para["field_date"])){
+            $label = "Price is $".$para["field_price_value"] ." for " .$para["field_date"][0]["value"]." to ". $para["field_date"][0]["end_value"];
+            $item['#label'] = $label;
+          }     
       }
     }
   }
