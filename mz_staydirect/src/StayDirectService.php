@@ -137,17 +137,18 @@ class StayDirectService {
     }
 }
 function setLoginRedirection($account){
-  $request = \Drupal::service('request_stack')->getCurrentRequest();
+  //$request = \Drupal::service('request_stack')->getCurrentRequest();
 
-  $current_request = \Drupal::request();
+  //$current_request = \Drupal::request();
   // Check for the specific URL parameter
-  if ($account->hasRole('webmaster') && !$current_request->query->has('pass-reset-token')) {
-    $redirect_url = "/admin/bookings";
-    $url = Url::fromUserInput($redirect_url);
-    if ($url instanceof Url) {
-      $request->query->set('destination', $url->toString());
-    }
-  }
+  // if ($account->hasRole('webmaster') && !$current_request->query->has('pass-reset-token') 
+  // && strpos($current_path, '/user/reset') !== 0) {
+  //   $redirect_url = "/admin/bookings";
+  //   $url = Url::fromUserInput($redirect_url);
+  //   if ($url instanceof Url) {
+  //     $request->query->set('destination', $url->toString());
+  //   }
+  //}
 
 
 
