@@ -378,9 +378,6 @@ function mz_staydirect_preprocess_html(&$variables) {
     $site_name = $site_variables['site_name'];
     $service_manage->executeJsonSite($site_name);
   }
-
-
-
   $config = \Drupal::config('mz_staydirect.settings');
   $ckeck_database = $config->get('ckeck_database');
   if($ckeck_database == NULL){
