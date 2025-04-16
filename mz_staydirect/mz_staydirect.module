@@ -471,7 +471,23 @@ function __mz_staydirect_custom_redirect_after_save(array &$form, FormStateInter
 
   if ($node instanceof \Drupal\node\NodeInterface) {
     // Redirect to the edit page of the same node.
-    $form_state->setRedirect('entity.node.edit_form', ['node' => $node->id()]);
+   $form_state->setRedirect('entity.node.edit_form', ['node' => $node->id()]);
   }
 }
 
+// function mz_staydirect_preprocess_page(&$variables){
+//   $node = $variables['elements']["#node"];
+
+//   if($variables["view_mode"] == "full" && is_object($node) && $node->bundle() == "page"){
+//     $internal_path = '/node'.'/'.$node->id();
+//     $alias = \Drupal::service('path_alias.manager')->getAliasByPath($internal_path);
+//     kint( $alias );
+//     if($alias == "/mypayments"){
+//       $subscribe_id = \Drupal::request()->query->get('subscribe_id');
+//       kint(    $subscribe_id );
+//       $variables["mypayments"] = \Drupal::service('mz_payment.manager')->getAllPaymentOffSubscription($subscribe_id);
+//       kint($variables);
+//     }
+//   }
+
+// }
