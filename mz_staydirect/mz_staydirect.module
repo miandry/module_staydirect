@@ -443,7 +443,7 @@ function mz_staydirect_user_login(AccountInterface $account) {
  */
 function mz_staydirect_form_node_article_edit_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   // Replace `article` with your actual content type machine name.
-
+  $form['actions']['submit']['#submit'][] = '__mz_staydirect_custom_redirect_after_save';
   if (isset($form['field_price']['widget']["entities"])) {
     
     // Loop through all paragraph instances
@@ -460,3 +460,18 @@ function mz_staydirect_form_node_article_edit_form_alter(&$form, FormStateInterf
     }
   }
 }
+
+
+
+/**
+ * Custom submit handler to change redirect after saving the node.
+ */
+function __mz_staydirect_custom_redirect_after_save(array &$form, FormStateInterface $form_state) {
+  $node = $form_state->getFormObject()->getEntity();
+
+  if ($node instanceof \Drupal\node\NodeInterface) {
+    // Redirect to the edit page of the same node.
+    $form_state->setRedirect('entity.node.edit_form', ['node' => $node->id()]);
+  }
+}
+
