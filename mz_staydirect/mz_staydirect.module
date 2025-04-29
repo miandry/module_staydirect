@@ -465,8 +465,9 @@ function mz_staydirect_form_node_article_edit_form_alter(&$form, FormStateInterf
  */
 function __mz_staydirect_custom_redirect_after_save(array &$form, FormStateInterface $form_state) {
   $node = $form_state->getFormObject()->getEntity();
-
-  if ($node instanceof \Drupal\node\NodeInterface) {
+  global $site_variables;
+  if ($node instanceof \Drupal\node\NodeInterface && $node->bundle() == "article" 
+    && isset($site_variables['username'])) {
     // Redirect to the edit page of the same node.
    $form_state->setRedirect('entity.node.edit_form', ['node' => $node->id()]);
   }
