@@ -1,0 +1,17 @@
+<?php
+
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function backend_staydirect_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+
+    if ($form['#form_id'] === 'node_booking_edit_form') {
+      if($form["moderation_state"]["widget"][0]["#default_value"] == "validate"){
+        unset($form["moderation_state"]);
+      }
+    }
+  
+  
+  }
+  
