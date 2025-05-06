@@ -1,0 +1,5 @@
+type: module
+name: 'Booking Only Staydirect'
+description: 'Booking Only Staydirect'
+package: 'custom'
+core_version_requirement: ^8 || ^9

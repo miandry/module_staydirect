@@ -1,0 +1,22 @@
+<?php
+
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function booking_staydirect_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+
+    $string = $form['#form_id'] ;
+    if (str_starts_with($string, 'block_content_') && str_ends_with($string, '_edit_form')) {
+         if ($form['field_paragraphs']['widget'][0]["#paragraph_type"] == "guides") {
+            foreach($form['field_paragraphs']['widget'] as $key => $item){
+                if(is_numeric($key) && isset($form['field_paragraphs']['widget'][$key]["subform"]["field_icon1"]["widget"]["open_button"])){
+                    $form['field_paragraphs']['widget'][$key]["subform"]["field_icon1"]["widget"]["open_button"]["#value"] =  t('Add Icon');
+                }
+            }
+      }
+      }
+  
+  
+  }
+  
