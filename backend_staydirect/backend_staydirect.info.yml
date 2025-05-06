@@ -1,6 +1,6 @@
 type: module
 name: 'Backend Staydirect'
-description: 'Backend Staydirect'
+description: 'Only For website main Staydirect'
 package: 'custom'
 core_version_requirement: ^8 || ^9
 
