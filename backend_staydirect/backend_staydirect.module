@@ -16,17 +16,15 @@ function backend_staydirect_form_alter(&$form, \Drupal\Core\Form\FormStateInterf
   }
   
 function backend_staydirect_preprocess_page(&$variables){
- $node = $variables["node"];
-
-  if(is_object($node) && $node->bundle() == "page"){
-    $internal_path = '/node'.'/'.$node->id();
-    $alias = \Drupal::service('path_alias.manager')->getAliasByPath($internal_path);
-    if($alias == "/mypayments"){
-       $subscribe_id = \Drupal::request()->query->get('subscribe_id');
-       $service = \Drupal::service('mz_payment.manager');
-       $variables["mypayments"] = $service->getAllPaymentOffSubscription($subscribe_id);
-       $variables["dateNext"] =  $service->dateNextPaymentSubscription($subscribe_id);
+    $node = $variables["node"];
+    if(is_object($node) && $node->bundle() == "page"){
+      $internal_path = '/node'.'/'.$node->id();
+      $alias = \Drupal::service('path_alias.manager')->getAliasByPath($internal_path);
+      if($alias == "/mypayments"){
+        $subscribe_id = \Drupal::request()->query->get('subscribe_id');
+        $service = \Drupal::service('mz_payment.manager');
+        $variables["mypayments"] = $service->getAllPaymentOffSubscription($subscribe_id);
+        $variables["dateNext"] = $service->dateNextPaymentSubscription($subscribe_id);
+      }
     }
-  }
-
-}
+ }

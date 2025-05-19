@@ -8,13 +8,24 @@ function booking_staydirect_form_alter(&$form, \Drupal\Core\Form\FormStateInterf
 
     $string = $form['#form_id'] ;
     if (str_starts_with($string, 'block_content_') && str_ends_with($string, '_edit_form')) {
-         if ($form['field_paragraphs']['widget'][0]["#paragraph_type"] == "guides") {
+
             foreach($form['field_paragraphs']['widget'] as $key => $item){
-                if(is_numeric($key) && isset($form['field_paragraphs']['widget'][$key]["subform"]["field_icon1"]["widget"]["open_button"])){
-                    $form['field_paragraphs']['widget'][$key]["subform"]["field_icon1"]["widget"]["open_button"]["#value"] =  t('Add Icon');
+                if (is_numeric($key) && $form['field_paragraphs']['widget'][$key]["#paragraph_type"] == "guides"
+                ) {
+                        if(is_numeric($key) && isset($form['field_paragraphs']['widget'][$key]["subform"]["field_icon1"]["widget"]["open_button"])){
+                            
+                            $form['field_paragraphs']['widget'][$key]["subform"]["field_icon1"]["widget"]["open_button"]["#value"] =  t('Add Icon');
+                        }
                 }
+                if( is_numeric($key) && $form['field_paragraphs']['widget'][$key]["#paragraph_type"] == "footer"){
+
+                      $form['field_paragraphs']['widget'][$key]["subform"]["field_icon"]["widget"]["open_button"]["#value"] =  t('Add Icon');
+                    
+                }
+                
             }
-      }
+            
+      
       }
   
   
