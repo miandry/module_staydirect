@@ -22,6 +22,11 @@ function booking_staydirect_form_alter(&$form, \Drupal\Core\Form\FormStateInterf
                       $form['field_paragraphs']['widget'][$key]["subform"]["field_icon"]["widget"]["open_button"]["#value"] =  t('Add Icon');
                     
                 }
+                if( is_numeric($key) && $form['field_paragraphs']['widget'][$key]["#paragraph_type"] == "contact"){
+
+                    $form['field_paragraphs']['widget'][$key]["subform"]["field_icon1"]["widget"]["open_button"]["#value"] =  t('Add Icon');
+                  
+                }
                 
             }
             
