@@ -202,6 +202,7 @@ function executeUnSubscription($subscription_id){
     }else{
       $message = 'Failed unSubscribe in STRIPE with id='.$subscription_id;
       \Drupal::logger('mz_staydirect')->error($message);
+      \Drupal::messenger()->addMessage($message,'error');
     }
 
     $base_url = \Drupal::request()->getSchemeAndHttpHost();
