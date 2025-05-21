@@ -248,9 +248,9 @@ function executeUnSubscription($subscription_id){
         $dateTo = new \DateTime('now');
 
         // Calculate the difference between dates
-        $interval = $dateFrom->diff($dateTo);
-        if($interval->days > 0 ){
-          $period = ceil(($interval->days)/$interval)*$interval;
+        $diff = $dateFrom->diff($dateTo);
+        if($diff->days > 0 ){
+          $period = ceil(($diff->days)/$interval)*$interval;
         } else{
           $period = $interval ;
         }
