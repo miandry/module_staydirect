@@ -1,0 +1,4 @@
+services:
+  booking_staydirect.manage:
+    class: Drupal\booking_staydirect\BookingTemplateStaydirect
+    arguments: []    
