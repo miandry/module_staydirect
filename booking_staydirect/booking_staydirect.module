@@ -1,5 +1,18 @@
 <?php
 
+use Drupal\node\Entity\Node;
+
+/**
+ * Implements hook_cron().
+ *
+ * Cette fonction est exécutée chaque fois que le cron de Drupal est lancé.
+ */
+
+ function booking_staydirect_cron() {
+   /// $service_manage = \Drupal::service('mz_staydirect.manage');
+  //  $service_manage->disableUnsubscribeSite();
+  } 
+
 
 /**
  * Implements hook_form_BASE_FORM_ID_alter().
@@ -7,6 +20,9 @@
 function booking_staydirect_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
 
     $string = $form['#form_id'] ;
+    if( $string == 'node_notification_form' || $string == 'node_notification_edit_form' ){
+        $form['actions']['submit']['#submit'][] = '__mz_booking_custom_redirect_after_save';
+    }
     if (str_starts_with($string, 'block_content_') && str_ends_with($string, '_edit_form')) {
 
             foreach($form['field_paragraphs']['widget'] as $key => $item){
@@ -35,4 +51,16 @@ function booking_staydirect_form_alter(&$form, \Drupal\Core\Form\FormStateInterf
   
   
   }
+
   
+  
+  /**
+   * Custom submit handler to change redirect after saving the node.
+   */
+  function __mz_booking_custom_redirect_after_save(array &$form, FormStateInterface $form_state) {
+    $node = $form_state->getFormObject()->getEntity();
+    if ($node instanceof \Drupal\node\NodeInterface && $node->bundle() == "notification" ) {
+      // Redirect to the edit page of the same node.
+     $form_state->setRedirect('entity.node.edit_form', ['node' => $node->id()]);
+    }
+  }
