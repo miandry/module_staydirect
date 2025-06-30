@@ -16,8 +16,9 @@ function backend_staydirect_form_alter(&$form, \Drupal\Core\Form\FormStateInterf
   }
   
 function backend_staydirect_preprocess_page(&$variables){
-    $node = $variables["node"];
-    if(is_object($node) && $node->bundle() == "page"){
+
+    if(isset($variables["node"]) && is_object($variables["node"]) && $variables["node"]->bundle() == "page"){
+      $node = $variables["node"];
       $internal_path = '/node'.'/'.$node->id();
       $alias = \Drupal::service('path_alias.manager')->getAliasByPath($internal_path);
       if($alias == "/mypayments"){

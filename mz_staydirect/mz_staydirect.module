@@ -472,3 +472,26 @@ function __mz_staydirect_custom_redirect_after_save(array &$form, FormStateInter
   }
 }
 
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function  mz_staydirect_form_user_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $form['#validate'][] = '___mz_staydirect_validate_strong_password';
+}
+
+/**
+ * Custom password validation handler.
+ */
+function ___mz_staydirect_validate_strong_password(array &$form, FormStateInterface $form_state) {
+  $password = $form_state->getValue('pass');
+  // If 'pass' is an array (e.g., password_confirm element)
+  if (is_array($password) && isset($password['pass1'])) {
+    $password = $password['pass1'];
+  }
+  // Example: at least 8 chars, 1 digit, 1 uppercase, 1 lowercase, 1 special char
+  if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{8,}$/', $password)) {
+    $form_state->setErrorByName('pass', t('The password must be at least 8 characters long and include an uppercase letter, a lowercase letter, a number, and a special character.'));
+  }
+}
+
+
