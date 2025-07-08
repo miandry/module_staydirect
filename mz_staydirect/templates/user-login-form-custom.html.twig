@@ -29,6 +29,13 @@
     .register-link {
         margin-right: 10px !important;
     }
+    
+    .description--register-forget {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+
+    }
 </style>
 <div class="custom-login-form-wrapper">
 	<div class="form-fields">
@@ -42,9 +49,21 @@
 			<a href="/register">
 				Register
 			</a>
-		</span> 
+		</span>
 		<span>
-			<a class="log-space" href="/user/password">  Forgot password?</a>
+			<a class="log-space" href="/user/password">
+				Forgot password?</a>
 		</span>
 	</div>
 </div>
+<script>
+    if( document.body.contains( document.querySelector("#log-reg-js form .std--useradmin.container--user-edit.container--user")) ) {
+      document.querySelector("#log-reg-js form .std--useradmin.container--user-edit.container--user").classList.remove("container");
+      document.querySelector("#log-reg-js form .std--useradmin.container--user-edit.container--user #user-info").classList.remove("col-lg-9")
+      document.querySelector("#log-reg-js form.user-register-form.user-form .useradmin--sidebar-left.position-relative").classList.remove("position-relative");
+    }
+        var inputName = document.getElementById('edit-name');
+        inputName.placeholder = 'Username';
+        var inputPass = document.getElementById('edit-pass');
+        inputPass.placeholder = 'Password';
+</script>
