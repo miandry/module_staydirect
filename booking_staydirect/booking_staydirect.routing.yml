@@ -1,0 +1,7 @@
+booking_staydirect.cancel:
+  path: '/cancel/{id}/booking'
+  defaults:
+    _controller: '\Drupal\booking_staydirect\Controller\DefaultController::cancel'
+    _title: 'cancel booking'
+  requirements:
+    _permission: 'access content'

@@ -8,6 +8,7 @@ use Drupal\user\Entity\User;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Drupal\Core\Url;
 
+
 /**
  * Class DefaultService.
  */
@@ -17,7 +18,35 @@ class BookingTemplateStaydirect {
    */
   public function __construct() {
   }
+  public  function cancelBooking($booking_id){
+    $entity = \Drupal::service('entity_type.manager')->getStorage('node')->load($booking_id);
+    $config = \Drupal::config('stripe.settings');
+    $apikeySecret = $config->get('apikey.' . $config->get('environment') . '.secret');
+    \Stripe\Stripe::setApiKey($apikeySecret);
+      try {
 
+        $paymentIntentId =  $entity->field_payment_intent_id->value ; // the ID of the PaymentIntent
+        $paymentIntent = \Stripe\PaymentIntent::retrieve($paymentIntentId);
+        if ($paymentIntent->status === 'requires_capture') {
+              $paymentIntent->cancel();
+              \Drupal::logger('booking_staydirect')->notice( "Canceled PaymentIntent: " . $paymentIntent->id);
+        }
+        if($paymentIntent->status === 'canceled'){
+            $entity->field_status->value ='cancel' ;
+            $entity->moderation_state->value = 'canceled';
+            $prix = $entity->field_price_with_tax->value ;
+            $entity->save();
+            \Drupal::messenger()->addMessage('✅ Order cancelled successfully. Your payment of '.$prix.' USD has been cancelled.');
+            return true;
+        }
+        return false ;
+
+
+      } catch (\Stripe\Exception\ApiErrorException $e) {
+        \Drupal::logger("booking_staydirect")->error( "Error: " . $e->getMessage());
+         return false;
+      }
+  }
   function _get_notification_set(){
   
     // Build entity query.
