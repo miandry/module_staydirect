@@ -418,6 +418,10 @@ function mz_staydirect_theme() {
  * Implements hook_form_FORM_ID_alter() for the user password form.
  */
 function mz_staydirect_form_user_pass_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  $form['name']['#title'] = t('Email adress');
+  // Optional: add validation to ensure it's a valid email
+  $form['#validate'][] = '__mz_staydirect_user_pass_validate_email_only';
+
   // Add an additional submit handler.
   $form['actions']['submit']['#submit'][] = 'mymodule_custom_redirect_submit';
 }
@@ -493,17 +497,7 @@ function ___mz_staydirect_validate_strong_password(array &$form, FormStateInterf
     $form_state->setErrorByName('pass', t('The password must be at least 8 characters long and include an uppercase letter, a lowercase letter, a number, and a special character.'));
   }
 }
-/**
- * Implements hook_form_FORM_ID_alter() for user password reset form.
- */
-function mz_staydirect_form_user_pass_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
-  // Change the label to "Email"
-  $form['name']['#title'] = t('Email');
-  $form['name']['#description'] = t('Enter your email address to reset your password.');
 
-  // Optional: add validation to ensure it's a valid email
-  $form['#validate'][] = '__mz_staydirect_user_pass_validate_email_only';
-}
 
 /**
  * Custom validation to ensure only email is used.
