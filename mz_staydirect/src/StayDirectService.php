@@ -170,8 +170,6 @@ function executeUnSubscription($subscription_id){
     $node_author_id = $site->getOwnerId();
 
     $service = \Drupal::service('mz_payment.manager');
-
-
   if($current_user_id === $node_author_id) {
 
     $result = $service->unSubscription($subscription_id);
@@ -179,7 +177,7 @@ function executeUnSubscription($subscription_id){
     if($result == "canceled") {
     //  $site->set('status', 0); 
     //  $site->save();
-      $created_timestamp = $booking->getCreatedTime(); 
+      $created_timestamp = $booking->updated->value ; 
       $created_date = date('Y-m-d', $created_timestamp); 
       $interval = $booking->interval->value ;
       $interval_days = ( $interval == "month" ) ? 30 : 365 ;
