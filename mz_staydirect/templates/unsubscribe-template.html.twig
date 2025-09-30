@@ -10,6 +10,8 @@
 	{% set booking = node_parser_by_properties(conditions)%}
 	{% set n = node_parser(booking|first) %}
 	{% set site = node_parser(n.field_item.nid) %}
+	{% if site %}
+
 <style>
     body {
   width: 100vw;
@@ -589,3 +591,7 @@ function random(min, max) {
 }
 
 </script>
+{% else %}
+ {{message('Id unsubscribe not exist ')}}
+   {% set t = redirect('/user') %} 
+{% endif %}
